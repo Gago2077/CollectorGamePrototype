@@ -1,26 +1,32 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class OrderSystem : MonoBehaviour
 {
-    public List<GameObject> itemsInScene;
-    protected List<GameObject> orderItems;
+    protected Dictionary<string, int> orderItems; // Changed key to string (product name)
+
     private void Awake()
     {
-        itemsInScene = new List<GameObject>();
-        orderItems = new List<GameObject>();
-        itemsInScene.AddRange(GameObject.FindGameObjectsWithTag("Obtainable Item"));
+        orderItems = new Dictionary<string, int>();
+        var itemsInScene = GameObject.FindGameObjectsWithTag("Obtainable Item");
+
         foreach (var item in itemsInScene)
         {
+            var product = item.GetComponent<ProductName>();
+            if (product == null) continue; // Skip items without ProductName component
+
             if (Random.Range(0, 2) > 0)
             {
-                orderItems.Add(item);
+                string productName = product.productName;
+                if (orderItems.ContainsKey(productName))
+                {
+                    orderItems[productName]++;
+                }
+                else
+                {
+                    orderItems.Add(productName, 1);
+                }
             }
         }
-    }
-    private void Update()
-    {
-        
     }
 }
