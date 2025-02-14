@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5195182258388819715}
   - component: {fileID: 1351931919424828554}
   - component: {fileID: 8518224561783168153}
+  - component: {fileID: -8924715052226284136}
   - component: {fileID: 606137014865197956}
   m_Layer: 0
   m_Name: Coca-Cola
@@ -107,6 +108,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43679534955826882, guid: d96dc2ae87528cc429f3c08d7728dc2b, type: 2}
+--- !u!114 &-8924715052226284136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4891867441471744870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f547ff2d1f817d4fbd1d7fb8c1a1cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productName: Coke
 --- !u!54 &606137014865197956
 Rigidbody:
   m_ObjectHideFlags: 0

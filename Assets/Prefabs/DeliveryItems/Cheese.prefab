@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8929805741670334670}
   - component: {fileID: 7027182628914505748}
   - component: {fileID: 258979011800003527}
+  - component: {fileID: 5096014168779697485}
   - component: {fileID: 5718618987475497564}
   m_Layer: 0
   m_Name: Cheese
@@ -107,6 +108,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43658161749702534, guid: 90953a78f7dfc2146a7111e79215fa40, type: 2}
+--- !u!114 &5096014168779697485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6961165476819878443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f547ff2d1f817d4fbd1d7fb8c1a1cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productName: Cheese
 --- !u!54 &5718618987475497564
 Rigidbody:
   m_ObjectHideFlags: 0
