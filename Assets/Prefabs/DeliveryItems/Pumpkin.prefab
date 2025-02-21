@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3665326170721210379}
   - component: {fileID: 592380315695006547}
   - component: {fileID: 4991401428828326167}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pumpkin
   m_TagString: Obtainable Item
   m_Icon: {fileID: 0}

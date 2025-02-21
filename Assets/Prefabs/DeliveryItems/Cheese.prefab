@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 258979011800003527}
   - component: {fileID: 5096014168779697485}
   - component: {fileID: 5718618987475497564}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cheese
   m_TagString: Obtainable Item
   m_Icon: {fileID: 0}

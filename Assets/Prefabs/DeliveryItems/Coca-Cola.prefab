@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8518224561783168153}
   - component: {fileID: -8924715052226284136}
   - component: {fileID: 606137014865197956}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Coca-Cola
   m_TagString: Obtainable Item
   m_Icon: {fileID: 0}
