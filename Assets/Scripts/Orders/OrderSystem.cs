@@ -1,51 +1,76 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 public class OrderSystem : MonoBehaviour
 {
-    protected Dictionary<string, int> orderItems; // Changed key to string (product name)
     private TextMeshPro orderText;
+    private Dictionary<string, int> currentOrder = new Dictionary<string, int>();
 
     private void Start()
     {
         orderText = GetComponentInChildren<TextMeshPro>();
         if (orderText == null)
         {
-            Debug.LogError("TextMeshPro component not found in OrderPapers.");
+            Debug.LogError("TextMeshPro component not found in OrderManager.");
             return;
         }
 
-        orderText.text = "Order List:\n";
+        GenerateNewOrder();
+    }
 
-        foreach (var item in orderItems)
+    public void GenerateNewOrder()
+    {
+        if (AvailableItemsManager.Instance == null) return;
+
+        currentOrder.Clear();
+        orderText.text = "New Order:\n";
+
+        List<string> availableProducts = new List<string>(AvailableItemsManager.Instance.AvailableItems.Keys);
+
+        if (availableProducts.Count == 0)
         {
-            // Directly use the product name (key) and quantity (value)
+            orderText.text += "No items available!";
+            return;
+        }
+
+        int numItems = Random.Range(1, Mathf.Min(4, availableProducts.Count + 1)); // Random order size
+
+        for (int i = 0; i < numItems; i++)
+        {
+            string productName = availableProducts[Random.Range(0, availableProducts.Count)];
+            int quantity = Random.Range(1, Mathf.Min(3, AvailableItemsManager.Instance.AvailableItems[productName] + 1));
+
+            if (currentOrder.ContainsKey(productName))
+            {
+                currentOrder[productName] += quantity;
+                AvailableItemsManager.Instance.DecreaseItem(productName, quantity);
+
+            }
+            else
+            {
+                currentOrder.Add(productName, quantity);
+                AvailableItemsManager.Instance.DecreaseItem(productName, quantity);
+
+            }
+
+        }
+
+        foreach (var item in currentOrder)
+        {
             orderText.text += $"{item.Key} x{item.Value}\n";
         }
     }
-    private void Awake()
+
+    public void CompleteOrder()
     {
-        orderItems = new Dictionary<string, int>();
-        var itemsInScene = GameObject.FindGameObjectsWithTag("Obtainable Item");
+        if (AvailableItemsManager.Instance == null) return;
 
-        foreach (var item in itemsInScene)
+        foreach (var item in currentOrder)
         {
-            var product = item.GetComponent<ProductName>();
-            if (product == null) continue; // Skip items without ProductName component
-
-            if (Random.Range(0, 2) > 0)
-            {
-                string productName = product.productName;
-                if (orderItems.ContainsKey(productName))
-                {
-                    orderItems[productName]++;
-                }
-                else
-                {
-                    orderItems.Add(productName, 1);
-                }
-            }
+            AvailableItemsManager.Instance.DecreaseItem(item.Key, item.Value);
         }
+
+        GenerateNewOrder();
     }
 }
