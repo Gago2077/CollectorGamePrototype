@@ -51,7 +51,7 @@ public class ObtainItem : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, viewDistance, pickupLayerMask))
         {
-            if (hit.collider.CompareTag("Obtainable Item"))
+            if (hit.collider.CompareTag("Obtainable Item") || hit.collider.CompareTag("OrderItem"))
             {
                 heldItemRb = hit.collider.GetComponent<Rigidbody>();
                 if (heldItemRb != null)
@@ -61,7 +61,6 @@ public class ObtainItem : MonoBehaviour
                     heldItemRb.isKinematic = true;
                     itemRotation = heldItemRb.rotation;
 
-                    // Optional: enable interpolation for even smoother movement if needed
                     heldItemRb.interpolation = RigidbodyInterpolation.Interpolate;
                 }
             }

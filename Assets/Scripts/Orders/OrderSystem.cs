@@ -35,32 +35,56 @@ public class OrderSystem : MonoBehaviour
         }
 
         int numItems = Random.Range(1, Mathf.Min(4, availableProducts.Count + 1)); // Random order size
+        Dictionary<string, int> tempOrder = new Dictionary<string, int>(); // Temporary storage
 
         for (int i = 0; i < numItems; i++)
         {
+            if (availableProducts.Count == 0) break; // Avoid errors if items run out
+
             string productName = availableProducts[Random.Range(0, availableProducts.Count)];
-            int quantity = Random.Range(1, Mathf.Min(3, AvailableItemsManager.Instance.AvailableItems[productName] + 1));
 
-            if (currentOrder.ContainsKey(productName))
+            // Get max possible quantity safely
+            int maxQuantity = AvailableItemsManager.Instance.AvailableItems.ContainsKey(productName)
+                ? AvailableItemsManager.Instance.AvailableItems[productName]
+                : 0;
+
+            if (maxQuantity == 0)
             {
-                currentOrder[productName] += quantity;
-                AvailableItemsManager.Instance.DecreaseItem(productName, quantity);
+                availableProducts.Remove(productName); // Remove unavailable items from selection
+                continue;
+            }
 
+            int quantity = Random.Range(1, Mathf.Min(3, maxQuantity + 1));
+
+            if (tempOrder.ContainsKey(productName))
+            {
+                tempOrder[productName] += quantity;
             }
             else
             {
-                currentOrder.Add(productName, quantity);
-                AvailableItemsManager.Instance.DecreaseItem(productName, quantity);
-
+                tempOrder.Add(productName, quantity);
             }
 
+            if (tempOrder[productName] >= maxQuantity)
+            {
+                availableProducts.Remove(productName); // Ensure we don’t request more than available
+            }
         }
 
+        // Now safely update AvailableItemsManager AFTER determining all selections
+        foreach (var item in tempOrder)
+        {
+            currentOrder[item.Key] = item.Value;
+            AvailableItemsManager.Instance.DecreaseItem(item.Key, item.Value);
+        }
+
+        // Update UI
         foreach (var item in currentOrder)
         {
             orderText.text += $"{item.Key} x{item.Value}\n";
         }
     }
+
 
     public void CompleteOrder()
     {

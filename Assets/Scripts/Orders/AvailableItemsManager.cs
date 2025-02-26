@@ -44,6 +44,8 @@ public class AvailableItemsManager : MonoBehaviour
                 AvailableItems.Add(productName, 1);
             }
         }
+
+        DebugAvailableItems("After scanning scene:");
     }
 
     public void DecreaseItem(string productName, int amount)
@@ -54,7 +56,37 @@ public class AvailableItemsManager : MonoBehaviour
             if (AvailableItems[productName] <= 0)
             {
                 AvailableItems.Remove(productName);
+                Debug.Log($"'{productName}' removed from AvailableItems.");
             }
+
+            DebugAvailableItems($"After decreasing '{productName}' by {amount}:");
+        }
+        else
+        {
+            Debug.LogWarning($"Tried to decrease '{productName}', but it doesn't exist in AvailableItems!");
+        }
+    }
+
+    public void IncreaseItem(string productName, int amount = 1)
+    {
+        if (AvailableItems.ContainsKey(productName))
+        {
+            AvailableItems[productName] += amount;
+        }
+        else
+        {
+            AvailableItems.Add(productName, amount);
+        }
+
+        DebugAvailableItems($"After adding '{productName}' x{amount}:");
+    }
+
+    private void DebugAvailableItems(string message)
+    {
+        Debug.Log($"{message} Current Available Items:");
+        foreach (var item in AvailableItems)
+        {
+            Debug.Log($"Item: {item.Key}, Count: {item.Value}");
         }
     }
 }
