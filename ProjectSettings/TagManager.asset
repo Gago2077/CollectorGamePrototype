@@ -9,6 +9,7 @@ TagManager:
   - Pumpkin
   - Obtainable Item
   - OrderItem
+  - Cart
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Ground
   - Player
   - Items
-  - 
+  - Cart
   - 
   - 
   - 

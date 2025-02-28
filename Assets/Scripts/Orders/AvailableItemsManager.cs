@@ -45,7 +45,7 @@ public class AvailableItemsManager : MonoBehaviour
             }
         }
 
-        DebugAvailableItems("After scanning scene:");
+        //DebugAvailableItems("After scanning scene:");
     }
 
     public void DecreaseItem(string productName, int amount)
@@ -59,7 +59,7 @@ public class AvailableItemsManager : MonoBehaviour
                 Debug.Log($"'{productName}' removed from AvailableItems.");
             }
 
-            DebugAvailableItems($"After decreasing '{productName}' by {amount}:");
+            //DebugAvailableItems($"After decreasing '{productName}' by {amount}:");
         }
         else
         {
@@ -78,15 +78,15 @@ public class AvailableItemsManager : MonoBehaviour
             AvailableItems.Add(productName, amount);
         }
 
-        DebugAvailableItems($"After adding '{productName}' x{amount}:");
+        //DebugAvailableItems($"After adding '{productName}' x{amount}:");
     }
 
-    private void DebugAvailableItems(string message)
-    {
-        Debug.Log($"{message} Current Available Items:");
-        foreach (var item in AvailableItems)
-        {
-            Debug.Log($"Item: {item.Key}, Count: {item.Value}");
-        }
-    }
+    //private void DebugAvailableItems(string message)
+    //{
+    //    Debug.Log($"{message} Current Available Items:");
+    //    foreach (var item in AvailableItems)
+    //    {
+    //        Debug.Log($"Item: {item.Key}, Count: {item.Value}");
+    //    }
+    //}
 }
