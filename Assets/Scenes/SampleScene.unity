@@ -1442,6 +1442,7 @@ MonoBehaviour:
   pickupLayerMask:
     serializedVersion: 2
     m_Bits: 375
+  cartController: {fileID: 1488521424}
 --- !u!54 &1488521423
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1489,7 +1490,7 @@ MonoBehaviour:
   positionSpring: 500
   maxSpeed: 4
   rotationSpeed: 5
-  isHolding: 0
+  isRiding: 0
 --- !u!4 &1535604086 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6360273048924365685, guid: 3ed682e58e66c6e4fb86cd429b3fb03e, type: 3}
@@ -2343,7 +2344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7182214470078641689, guid: 31456d0cd1f32264f832fe823d4cf79f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.654
+      value: -4.6539974
       objectReference: {fileID: 0}
     - target: {fileID: 7182214470078641689, guid: 31456d0cd1f32264f832fe823d4cf79f, type: 3}
       propertyPath: m_LocalRotation.w

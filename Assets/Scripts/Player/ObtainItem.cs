@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -12,6 +11,8 @@ public class ObtainItem : MonoBehaviour
     public LayerMask pickupLayerMask;
     private bool isHoldingItem = false;
     private Quaternion itemRotation;
+    public ShoppingCartController cartController;
+    private int originalLayer; // Store original layer as int
 
     private void Update()
     {
@@ -31,18 +32,30 @@ public class ObtainItem : MonoBehaviour
             MoveHeldItem();
         }
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * viewDistance, Color.red);
+        DebugLookDirection();
     }
 
     private void HandlePickupInput()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !isHoldingItem)
+        if (Input.GetKeyDown(KeyCode.E) && !isHoldingItem && !cartController.isRiding)
         {
             TryPickupItem();
+
+            if (heldItemRb != null) // Ensure we have a valid item before changing layers
+            {
+                originalLayer = heldItemRb.gameObject.layer; // Store original layer as int
+                heldItemRb.gameObject.layer = LayerMask.NameToLayer("NoCollision");
+            }
         }
 
         if (Input.GetKeyUp(KeyCode.E) && isHoldingItem)
         {
             DropItem();
+
+            if (heldItemRb != null) // Ensure the item exists before restoring
+            {
+                heldItemRb.gameObject.layer = originalLayer; // Restore original layer
+            }
         }
     }
 
@@ -60,7 +73,6 @@ public class ObtainItem : MonoBehaviour
                     heldItemRb.useGravity = false;
                     heldItemRb.isKinematic = true;
                     itemRotation = heldItemRb.rotation;
-
                     heldItemRb.interpolation = RigidbodyInterpolation.Interpolate;
                 }
             }
@@ -75,9 +87,15 @@ public class ObtainItem : MonoBehaviour
 
     private void DropItem()
     {
+        if (heldItemRb == null) return; // Prevent errors
+
         heldItemRb.useGravity = true;
         heldItemRb.isKinematic = false;
         heldItemRb.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
+
+        // Restore layer before setting `heldItemRb` to null
+        heldItemRb.gameObject.layer = originalLayer;
+
         isHoldingItem = false;
         heldItemRb = null;
 
@@ -110,6 +128,16 @@ public class ObtainItem : MonoBehaviour
             // Re-enable controls when the mouse button is released
             PlayerMovement.canMove = true;
             MouseMovement.canLook = true;
+        }
+    }
+
+    private void DebugLookDirection()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, viewDistance))
+        {
+            Debug.Log("Looking at: " + hit.collider.name);
+            Debug.DrawLine(Camera.main.transform.position, hit.point, Color.green);
         }
     }
 }
