@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 3.0f;
     public float gravity = -9.81f * 2f;
     public static bool canMove = true;
-
+    public bool isCrouching = false;
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -45,6 +45,18 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpRequested = true;
         }
+
+        if (Input.GetKeyDown(KeyCode.C) && !isCrouching)
+        {
+            Crouch();
+            isCrouching = true;
+        }
+        else if(Input.GetKeyDown(KeyCode.C) && isCrouching)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+            isCrouching = false;
+        }
+
     }
 
     private void FixedUpdate()
@@ -57,6 +69,10 @@ public class PlayerMovement : MonoBehaviour
         ApplyGravity();
     }
 
+    private void Crouch()
+    {
+        transform.localScale = new Vector3(1, 0.5f, 1);
+    }
     private void HandleGroundCheck()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
