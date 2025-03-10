@@ -13,9 +13,9 @@ public class GetOrder : MonoBehaviour
     }
     private void CreateOrder()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G) && OrderManager.Instance.activeOrders.Count < OrderManager.Instance.maxAvailableOrders )
         {
-            Instantiate(orderPrefab, orderSpawnPoint.position, orderSpawnPoint.rotation);
+            OrderManager.Instance.activeOrders.Add(Instantiate(orderPrefab, orderSpawnPoint.position, orderSpawnPoint.rotation).transform);
         }
     }
 }

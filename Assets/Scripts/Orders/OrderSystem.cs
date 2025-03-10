@@ -4,8 +4,8 @@ using TMPro;
 
 public class OrderSystem : MonoBehaviour
 {
-    private TextMeshPro orderText;
-    private Dictionary<string, int> currentOrder = new Dictionary<string, int>();
+    public TextMeshPro orderText;
+    public Dictionary<string, int> currentOrder = new Dictionary<string, int>();
 
     private void Start()
     {

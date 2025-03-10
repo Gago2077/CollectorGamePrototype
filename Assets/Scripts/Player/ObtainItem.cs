@@ -32,7 +32,7 @@ public class ObtainItem : MonoBehaviour
             MoveHeldItem();
         }
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * viewDistance, Color.red);
-        DebugLookDirection();
+        //DebugLookDirection();
     }
 
     private void HandlePickupInput()
