@@ -6,7 +6,7 @@ public class OrderManager : MonoBehaviour
 {
     public static OrderManager Instance { get; private set; }
     public List<Transform> activeOrders = new List<Transform>();
-    public int maxAvailableOrders = 3;
+    public int maxAvailableOrders = 1;
     private void Awake()
     {
         if (Instance == null)
@@ -19,5 +19,5 @@ public class OrderManager : MonoBehaviour
             return;
         }
     }
-
+    
 }

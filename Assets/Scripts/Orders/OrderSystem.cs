@@ -5,7 +5,8 @@ using TMPro;
 public class OrderSystem : MonoBehaviour
 {
     public TextMeshPro orderText;
-    public Dictionary<string, int> currentOrder = new Dictionary<string, int>();
+    public List<KeyValuePair<string, int>> currentOrder = new List<KeyValuePair<string, int>>();
+    public CartInventory cartInventory;
 
     private void Start()
     {
@@ -15,8 +16,33 @@ public class OrderSystem : MonoBehaviour
             Debug.LogError("TextMeshPro component not found in OrderManager.");
             return;
         }
-
+        cartInventory = FindObjectOfType<CartInventory>();
         GenerateNewOrder();
+    }
+
+    private void StrikeThroughFoundItems()
+    {
+        if (cartInventory == null || currentOrder == null || currentOrder.Count == 0)
+            return;
+
+        string newOrderText = "New Order:\n";
+
+        foreach (var item in currentOrder)
+        {
+            string line = $"{item.Key} x{item.Value}";
+            if (cartInventory.itemsInCart.TryGetValue(item.Key, out int cartQuantity) && cartQuantity == item.Value)
+            {
+                line = $"<s>{line}</s>";
+            }
+            newOrderText += line + "\n";
+        }
+
+        orderText.text = newOrderText;
+    }
+
+    private void Update()
+    {
+        StrikeThroughFoundItems();
     }
 
     public void GenerateNewOrder()
@@ -34,57 +60,51 @@ public class OrderSystem : MonoBehaviour
             return;
         }
 
-        int numItems = Random.Range(1, Mathf.Min(4, availableProducts.Count + 1)); // Random order size
-        Dictionary<string, int> tempOrder = new Dictionary<string, int>(); // Temporary storage
+        int numItems = Random.Range(1, Mathf.Min(4, availableProducts.Count + 1));
+        List<string> orderProducts = new List<string>();
+        Dictionary<string, int> orderQuantities = new Dictionary<string, int>();
 
         for (int i = 0; i < numItems; i++)
         {
-            if (availableProducts.Count == 0) break; // Avoid errors if items run out
+            if (availableProducts.Count == 0) break;
 
             string productName = availableProducts[Random.Range(0, availableProducts.Count)];
-
-            // Get max possible quantity safely
-            int maxQuantity = AvailableItemsManager.Instance.AvailableItems.ContainsKey(productName)
-                ? AvailableItemsManager.Instance.AvailableItems[productName]
-                : 0;
+            int maxQuantity = AvailableItemsManager.Instance.AvailableItems[productName];
 
             if (maxQuantity == 0)
             {
-                availableProducts.Remove(productName); // Remove unavailable items from selection
+                availableProducts.Remove(productName);
                 continue;
             }
 
             int quantity = Random.Range(1, Mathf.Min(3, maxQuantity + 1));
 
-            if (tempOrder.ContainsKey(productName))
+            if (orderQuantities.ContainsKey(productName))
             {
-                tempOrder[productName] += quantity;
+                orderQuantities[productName] += quantity;
             }
             else
             {
-                tempOrder.Add(productName, quantity);
+                orderProducts.Add(productName);
+                orderQuantities.Add(productName, quantity);
             }
 
-            if (tempOrder[productName] >= maxQuantity)
+            if (orderQuantities[productName] >= maxQuantity)
             {
-                availableProducts.Remove(productName); // Ensure we don’t request more than available
+                availableProducts.Remove(productName);
             }
         }
 
-        // Now safely update AvailableItemsManager AFTER determining all selections
-        foreach (var item in tempOrder)
+        foreach (var product in orderProducts)
         {
-            currentOrder[item.Key] = item.Value;
-            AvailableItemsManager.Instance.DecreaseItem(item.Key, item.Value);
+            int quantity = orderQuantities[product];
+            AvailableItemsManager.Instance.DecreaseItem(product, quantity);
+            currentOrder.Add(new KeyValuePair<string, int>(product, quantity));
         }
 
-        // Update UI
-        foreach (var item in currentOrder)
-        {
-            orderText.text += $"{item.Key} x{item.Value}\n";
-        }
+        // Initial text generation without underlines
+        StrikeThroughFoundItems();
     }
-
 
     public void CompleteOrder()
     {
