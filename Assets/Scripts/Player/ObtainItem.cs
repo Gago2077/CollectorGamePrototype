@@ -37,7 +37,7 @@ public class ObtainItem : MonoBehaviour
 
     private void HandlePickupInput()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !isHoldingItem && !cartController.isRiding)
+        if (Input.GetKeyDown(KeyCode.E) && !isHoldingItem && !cartController.IsRiding)
         {
             TryPickupItem();
 

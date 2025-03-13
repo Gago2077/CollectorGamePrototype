@@ -34,7 +34,7 @@ public class AvailableItemsManager : MonoBehaviour
             var product = item.GetComponent<ProductName>();
             if (product == null) continue;
 
-            string productName = product.productName;
+            string productName = product.Name;
             if (AvailableItems.ContainsKey(productName))
             {
                 AvailableItems[productName]++;

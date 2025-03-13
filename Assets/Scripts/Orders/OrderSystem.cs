@@ -4,40 +4,40 @@ using TMPro;
 
 public class OrderSystem : MonoBehaviour
 {
-    public TextMeshPro orderText;
-    public List<KeyValuePair<string, int>> currentOrder = new List<KeyValuePair<string, int>>();
-    public CartInventory cartInventory;
+    private TextMeshPro _orderText;
+    private List<KeyValuePair<string, int>> _currentOrder = new List<KeyValuePair<string, int>>();
+    [SerializeField] private CartInventory _cartInventory;
 
     private void Start()
     {
-        orderText = GetComponentInChildren<TextMeshPro>();
-        if (orderText == null)
+        _orderText = GetComponentInChildren<TextMeshPro>();
+        if (_orderText == null)
         {
             Debug.LogError("TextMeshPro component not found in OrderManager.");
             return;
         }
-        cartInventory = FindObjectOfType<CartInventory>();
+        _cartInventory = FindObjectOfType<CartInventory>();
         GenerateNewOrder();
     }
 
     private void StrikeThroughFoundItems()
     {
-        if (cartInventory == null || currentOrder == null || currentOrder.Count == 0)
+        if (_cartInventory == null || _currentOrder == null || _currentOrder.Count == 0)
             return;
 
         string newOrderText = "New Order:\n";
 
-        foreach (var item in currentOrder)
+        foreach (var item in _currentOrder)
         {
             string line = $"{item.Key} x{item.Value}";
-            if (cartInventory.itemsInCart.TryGetValue(item.Key, out int cartQuantity) && cartQuantity == item.Value)
+            if (_cartInventory.ItemsInCart.TryGetValue(item.Key, out int cartQuantity) && cartQuantity == item.Value)
             {
                 line = $"<s>{line}</s>";
             }
             newOrderText += line + "\n";
         }
 
-        orderText.text = newOrderText;
+        _orderText.text = newOrderText;
     }
 
     private void Update()
@@ -49,14 +49,14 @@ public class OrderSystem : MonoBehaviour
     {
         if (AvailableItemsManager.Instance == null) return;
 
-        currentOrder.Clear();
-        orderText.text = "New Order:\n";
+        _currentOrder.Clear();
+        _orderText.text = "New Order:\n";
 
         List<string> availableProducts = new List<string>(AvailableItemsManager.Instance.AvailableItems.Keys);
 
         if (availableProducts.Count == 0)
         {
-            orderText.text += "No items available!";
+            _orderText.text += "No items available!";
             return;
         }
 
@@ -99,7 +99,7 @@ public class OrderSystem : MonoBehaviour
         {
             int quantity = orderQuantities[product];
             AvailableItemsManager.Instance.DecreaseItem(product, quantity);
-            currentOrder.Add(new KeyValuePair<string, int>(product, quantity));
+            _currentOrder.Add(new KeyValuePair<string, int>(product, quantity));
         }
 
         // Initial text generation without underlines
@@ -110,7 +110,7 @@ public class OrderSystem : MonoBehaviour
     {
         if (AvailableItemsManager.Instance == null) return;
 
-        foreach (var item in currentOrder)
+        foreach (var item in _currentOrder)
         {
             AvailableItemsManager.Instance.DecreaseItem(item.Key, item.Value);
         }

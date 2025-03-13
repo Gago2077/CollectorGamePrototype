@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GetOrder : MonoBehaviour
 {
-    public Transform orderSpawnPoint;
-    public GameObject orderPrefab;
+    [SerializeField] private Transform _orderSpawnPoint;
+    [SerializeField] private GameObject _orderPrefab;
 
     private void Update()
     {
@@ -13,9 +13,9 @@ public class GetOrder : MonoBehaviour
     }
     private void CreateOrder()
     {
-        if (Input.GetKeyDown(KeyCode.G) && OrderManager.Instance.activeOrders.Count < OrderManager.Instance.maxAvailableOrders )
+        if (Input.GetKeyDown(KeyCode.G) && OrderManager.Instance.ActiveOrders.Count < OrderManager.Instance.MaxAvailableOrders )
         {
-            OrderManager.Instance.activeOrders.Add(Instantiate(orderPrefab, orderSpawnPoint.position, orderSpawnPoint.rotation).transform);
+            OrderManager.Instance.ActiveOrders.Add(Instantiate(_orderPrefab, _orderSpawnPoint.position, _orderSpawnPoint.rotation).transform);
         }
     }
 }

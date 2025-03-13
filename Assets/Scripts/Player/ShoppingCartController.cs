@@ -4,29 +4,29 @@ using UnityEngine;
 public class ShoppingCartController : MonoBehaviour
 {
     [Header("References")]
-    public Transform holdPosition;
-    public float grabDistance = 2f;
-    public LayerMask cartLayer;
+    [SerializeField] private Transform _holdPosition;
+    [SerializeField] private float _grabDistance = 2f;
+    [SerializeField] private LayerMask _cartLayer;
 
-    private PlayerMovement playerMovement;
+    private PlayerMovement _playerMovement;
     [Header("Physics Settings")]
-    public float positionSpring = 500f;
-    public float maxSpeed = 4f;
-    public float rotationSpeed = 5f;
+    [SerializeField] private float _positionSpring = 500f;
+    [SerializeField] private float _maxSpeed = 4f;
+    [SerializeField] private float _rotationSpeed = 5f;
 
-    private FixedJoint fixedJoint;
-    private Rigidbody cartRb;
-    public bool isRiding;
+    private FixedJoint _fixedJoint;
+    private Rigidbody _cartRb;
+    public bool IsRiding;
 
     private void Awake()
     {
-        playerMovement = GetComponent<PlayerMovement>();
+        _playerMovement = GetComponent<PlayerMovement>();
     }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if (isRiding) ReleaseCart();
+            if (IsRiding) ReleaseCart();
             else TryGrabCart();
         }
     }
@@ -37,18 +37,18 @@ public class ShoppingCartController : MonoBehaviour
 
         // Raycast from screen center
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (!playerMovement.isCrouching && Physics.Raycast(ray, out RaycastHit hit, grabDistance, cartLayer) &&
+        if (!_playerMovement.isCrouching && Physics.Raycast(ray, out RaycastHit hit, _grabDistance, _cartLayer) &&
             hit.collider.CompareTag("Cart"))
         {
-            cartRb = hit.rigidbody;
-            if (cartRb == null) return;
+            _cartRb = hit.rigidbody;
+            if (_cartRb == null) return;
 
             // Snap to position/rotation immediately
-            cartRb.transform.position = holdPosition.position;
-            cartRb.transform.rotation = holdPosition.rotation;
+            _cartRb.transform.position = _holdPosition.position;
+            _cartRb.transform.rotation = _holdPosition.rotation;
 
             AttachFixedJoint();
-            isRiding = true;
+            IsRiding = true;
         }
     }
 
@@ -60,30 +60,30 @@ public class ShoppingCartController : MonoBehaviour
             playerRb.isKinematic = true;
         }
 
-        fixedJoint = gameObject.AddComponent<FixedJoint>();
-        fixedJoint.connectedBody = cartRb;
-        fixedJoint.enableCollision = false;
+        _fixedJoint = gameObject.AddComponent<FixedJoint>();
+        _fixedJoint.connectedBody = _cartRb;
+        _fixedJoint.enableCollision = false;
     }
 
     private void ReleaseCart()
     {
-        isRiding = false;
-        if (fixedJoint != null) Destroy(fixedJoint);
-        cartRb = null;
+        IsRiding = false;
+        if (_fixedJoint != null) Destroy(_fixedJoint);
+        _cartRb = null;
     }
 
     private void FixedUpdate()
     {
-        if (!isRiding || cartRb == null) return;
+        if (!IsRiding || _cartRb == null) return;
 
         //// Maintain position
         //Vector3 positionError = holdPosition.position - cartRb.position;
         //cartRb.AddForce(positionError * positionSpring);
 
         // Maintain rotation
-        Quaternion rotationError = holdPosition.rotation * Quaternion.Inverse(cartRb.rotation);
+        Quaternion rotationError = _holdPosition.rotation * Quaternion.Inverse(_cartRb.rotation);
         rotationError.ToAngleAxis(out float angle, out Vector3 axis);
-        cartRb.AddTorque(axis * (angle * Mathf.Deg2Rad * rotationSpeed));
+        _cartRb.AddTorque(axis * (angle * Mathf.Deg2Rad * _rotationSpeed));
 
         //// Limit velocity
         //if (cartRb.velocity.magnitude > maxSpeed)

@@ -87,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
     private void HandleMovement()
     {
         // Smooth speed adjustment
-        float targetSpeed = cartController != null && cartController.isRiding
+        float targetSpeed = cartController != null && cartController.IsRiding
             ? cartSpeed
             : normalSpeed;
 

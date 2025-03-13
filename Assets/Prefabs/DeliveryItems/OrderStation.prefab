@@ -77,8 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aec2fa27a204fdb43ac0e94772c3deaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orderSpawnPoint: {fileID: 5919756950731231141}
-  orderPrefab: {fileID: 5957957708426580911, guid: 2706c985950eae14aa6a436bf48a88f9, type: 3}
+  _orderSpawnPoint: {fileID: 5919756950731231141}
+  _orderPrefab: {fileID: 5957957708426580911, guid: 8408caaa6647acc4896cb1f16b066cb6, type: 3}
 --- !u!1 &6348252834613321861
 GameObject:
   m_ObjectHideFlags: 0
